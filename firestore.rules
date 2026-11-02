@@ -1,0 +1,98 @@
+rules_version = '2';
+
+// There is no sign-in: anyone with the link may read and change recipes.
+// These rules keep writes to the exact shapes the app produces and refuse
+// everything else. Keep in sync with src/source/RecipeSource.ts and
+// src/domain/schema.ts (LIMITS).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isText(value, maxSize) {
+      return value is string && value.size() > 0 && value.size() <= maxSize;
+    }
+
+    function isOptionalText(value, maxSize) {
+      return value is string && value.size() <= maxSize;
+    }
+
+    function isId(value) {
+      return isText(value, 40);
+    }
+
+    function isDate(value) {
+      return value is string && value.size() >= 10 && value.size() <= 40;
+    }
+
+    function isWholeNumber(value, min, max) {
+      return value is int && value >= min && value <= max;
+    }
+
+    function isRecipe(data) {
+      let fields = ['title', 'description', 'photoId', 'tags', 'totalMin',
+                    'servings', 'ingredients', 'steps', 'notes',
+                    'favorite', 'cookCount', 'lastCookedAt', 'createdAt',
+                    'updatedAt'];
+      return data.keys().hasOnly(fields)
+        && data.keys().hasAll(fields)
+        && isText(data.title, 120)
+        && isOptionalText(data.description, 500)
+        && (data.photoId == null || isId(data.photoId))
+        && data.tags is list && data.tags.size() <= 12
+        && (data.totalMin == null || isWholeNumber(data.totalMin, 1, 1440))
+        && isWholeNumber(data.servings, 1, 50)
+        // Items of the lists are checked by the app (zod); here only their
+        // number, and Firestore's 1 MiB per document bounds the rest.
+        && data.ingredients is list && data.ingredients.size() <= 80
+        && data.steps is list && data.steps.size() <= 60
+        && isOptionalText(data.notes, 2000)
+        && data.favorite is bool
+        && isWholeNumber(data.cookCount, 0, 100000)
+        && (data.lastCookedAt == null || isDate(data.lastCookedAt))
+        && isDate(data.createdAt)
+        && isDate(data.updatedAt);
+    }
+
+    // A photo shrunk by the browser, as a data URL. Written once, never changed.
+    function isPhoto(data) {
+      return data.keys().hasOnly(['dataUrl'])
+        && data.dataUrl is string
+        && data.dataUrl.size() <= 900000
+        && data.dataUrl.matches('^data:image/(webp|jpeg|png|svg\\+xml)[;,].*');
+    }
+
+    function isShoppingItem(data) {
+      let fields = ['name', 'qty', 'unit', 'recipeId', 'recipeTitle',
+                    'checked', 'addedAt'];
+      return data.keys().hasOnly(fields)
+        && data.keys().hasAll(fields)
+        && isText(data.name, 120)
+        && (data.qty == null || (data.qty is number && data.qty >= 0 && data.qty <= 100000))
+        && isOptionalText(data.unit, 20)
+        && (data.recipeId == null || isId(data.recipeId))
+        && (data.recipeTitle == null || isText(data.recipeTitle, 120))
+        && data.checked is bool
+        && isDate(data.addedAt);
+    }
+
+    match /recipes/{recipeId} {
+      allow read: if true;
+      allow create, update: if isId(recipeId) && isRecipe(request.resource.data);
+      allow delete: if true;
+    }
+
+    match /recipePhotos/{photoId} {
+      allow read: if true;
+      allow create: if isId(photoId) && isPhoto(request.resource.data);
+      allow delete: if true;
+    }
+
+    match /shoppingItems/{itemId} {
+      allow read: if true;
+      allow create: if isId(itemId) && isShoppingItem(request.resource.data);
+      // Ticking is the only change.
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['checked'])
+        && request.resource.data.checked is bool;
+      allow delete: if true;
+    }
+  }
+}
