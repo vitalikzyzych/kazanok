@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  categoryFromText,
   CHATGPT_PROMPT_TEMPLATE,
   cleanTags,
   defaultShoppingSelection,
@@ -11,8 +12,10 @@ import {
   formatGroupAmount,
   formatMinutes,
   formatQty,
+  guessCategory,
   ingredientToLine,
   mergeShopping,
+  pageOf,
   parseIngredient,
   parseQty,
   parseRecipeText,
@@ -31,6 +34,7 @@ import type { IRecipe, IRecipeFilter, IShoppingItem } from "./types";
 const recipe = (over: Partial<IRecipe>): IRecipe => ({
   id: "r1",
   title: "Борщ",
+  category: "dish",
   description: "",
   photoId: null,
   tags: [],
@@ -48,6 +52,7 @@ const recipe = (over: Partial<IRecipe>): IRecipe => ({
 });
 
 const noFilter: IRecipeFilter = {
+  category: "dish",
   query: "",
   tags: [],
   maxMin: 0,
@@ -206,6 +211,7 @@ describe("parseRecipeText", () => {
     ]);
     expect(r.steps.map((s) => s.timerMin)).toEqual([null, null, 3]);
     expect(r.tags).toEqual(["Сніданок", "Українська кухня", "Вегетаріанське"]);
+    expect(r.category).toBe("dish");
     expect(CHATGPT_PROMPT_TEMPLATE).toContain(RECIPE_FORMAT_EXAMPLE);
   });
 
@@ -251,6 +257,10 @@ describe("parseRecipeText", () => {
     expect(back.totalMin).toBe(75);
     expect(back.servings).toBe(4);
     expect(back.tags).toEqual(["Суп", "Обід"]);
+    expect(back.category).toBe("dish");
+    expect(
+      parseRecipeText(recipeAsText({ ...r, category: "baking" })).category
+    ).toBe("baking");
     expect(back.ingredients.map(strip)).toEqual(r.ingredients.map(strip));
     expect(back.steps.map((s) => s.timerMin)).toEqual([10]);
   });
@@ -303,6 +313,33 @@ describe("tags", () => {
     expect(
       cleanTags(Array.from({ length: 20 }, (_, i) => `Тег ${i}`))
     ).toHaveLength(12);
+  });
+});
+
+describe("sections and pages", () => {
+  it("guesses the section from the dish", () => {
+    expect(guessCategory({ title: "Яблучний пиріг", tags: [] })).toBe("baking");
+    expect(guessCategory({ title: "Тірамісу", tags: [] })).toBe("baking");
+    expect(guessCategory({ title: "Шашлик", tags: ["Мангал"] })).toBe("dish");
+    expect(categoryFromText(" Випічка")).toBe("baking");
+    expect(categoryFromText("страви")).toBe("dish");
+    expect(categoryFromText("інше")).toBeNull();
+  });
+
+  it("lists only the section's recipes", () => {
+    const list = [recipe({ id: "a" }), recipe({ id: "b", category: "baking" })];
+    expect(
+      filterRecipes(list, { ...noFilter, category: "baking" }).map((r) => r.id)
+    ).toEqual(["b"]);
+  });
+
+  it("cuts pages and keeps the page in range", () => {
+    const list = Array.from({ length: 45 }, (_, i) => i);
+    expect(pageOf(list, 1, 20)).toMatchObject({ page: 1, pages: 3 });
+    expect(pageOf(list, 3, 20).items).toEqual([40, 41, 42, 43, 44]);
+    expect(pageOf(list, 9, 20).page).toBe(3);
+    expect(pageOf(list, 0, 20).page).toBe(1);
+    expect(pageOf([], 2, 10)).toMatchObject({ items: [], page: 1, pages: 1 });
   });
 });
 

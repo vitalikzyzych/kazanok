@@ -32,8 +32,10 @@ service cloud.firestore {
                     'servings', 'ingredients', 'steps', 'notes',
                     'favorite', 'cookCount', 'lastCookedAt', 'createdAt',
                     'updatedAt'];
-      return data.keys().hasOnly(fields)
+      // category: added later; recipes stored before it have none.
+      return data.keys().hasOnly(fields.concat(['category']))
         && data.keys().hasAll(fields)
+        && data.get('category', 'dish') in ['dish', 'baking']
         && isText(data.title, 120)
         && isOptionalText(data.description, 500)
         && (data.photoId == null || isId(data.photoId))

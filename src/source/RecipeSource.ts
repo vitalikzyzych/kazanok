@@ -11,6 +11,7 @@ import {
 
 import { getDb } from "@/core/firebase";
 import {
+  guessCategory,
   type IRecipe,
   type IShoppingItem,
   recipeSchema,
@@ -47,6 +48,20 @@ const parseDocs = <T>(
     return [];
   });
 
+/**
+ * Recipes stored before sections existed have no category: file them by dish
+ * type until someone saves them with one.
+ */
+const withCategory = (v: unknown): unknown => {
+  if (typeof v !== "object" || v === null || "category" in v) return v;
+  const r = v as Record<string, unknown>;
+  const title = typeof r.title === "string" ? r.title : "";
+  const tags = Array.isArray(r.tags)
+    ? r.tags.filter((t): t is string => typeof t === "string")
+    : [];
+  return { ...r, category: guessCategory({ title, tags }) };
+};
+
 const withoutId = <T extends { id: string }>({ id: _id, ...rest }: T) => rest;
 
 // ---------- recipes ----------
@@ -58,7 +73,9 @@ export const subscribeRecipes = (
   onSnapshot(
     collection(getDb(), RECIPES),
     (snapshot) =>
-      onData(parseDocs(snapshot.docs, (v) => recipeSchema.safeParse(v))),
+      onData(
+        parseDocs(snapshot.docs, (v) => recipeSchema.safeParse(withCategory(v)))
+      ),
     onError
   );
 

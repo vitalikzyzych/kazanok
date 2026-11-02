@@ -22,6 +22,8 @@ describe("dishKind", () => {
       greek: "salad",
       pancakes: "breakfast",
       "chicken-soup": "soup",
+      sharlotka: "baking",
+      bulochky: "baking",
     });
   });
 

@@ -5,6 +5,8 @@ import { FluentIcon, tintClass } from "@/ui";
 const TIME_LIMITS = [20, 45];
 
 interface IFilterChipsProps {
+  favoritesOnly: boolean;
+  onFavorites: (on: boolean) => void;
   tags: string[];
   selectedTags: string[];
   maxMin: number;
@@ -12,8 +14,13 @@ interface IFilterChipsProps {
   onTime: (maxMin: number) => void;
 }
 
-/** Cooking time and tag filters: one row that scrolls on phones, wraps on desktop. */
+/**
+ * Favourites, cooking time and tag filters: one row that scrolls on phones,
+ * wraps on desktop.
+ */
 const FilterChips = ({
+  favoritesOnly,
+  onFavorites,
   tags,
   selectedTags,
   maxMin,
@@ -21,6 +28,15 @@ const FilterChips = ({
   onTime,
 }: IFilterChipsProps) => (
   <div className="chips" role="group" aria-label="Фільтри">
+    <Button
+      unstyled
+      className="chip chip--fav"
+      aria-pressed={favoritesOnly}
+      onClick={() => onFavorites(!favoritesOnly)}
+    >
+      <FluentIcon name={favoritesOnly ? "HeartFilled" : "Heart"} size={18} />
+      Улюблені
+    </Button>
     {TIME_LIMITS.map((m, i) => (
       <Button
         key={m}

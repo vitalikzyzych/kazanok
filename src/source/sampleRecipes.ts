@@ -1,6 +1,7 @@
 import { samplePhoto, type SamplePhotoKind } from "./samplePhotos";
 
 import {
+  guessCategory,
   type IRecipe,
   type IShoppingItem,
   parseIngredients,
@@ -398,6 +399,59 @@ const SAMPLES: ISample[] = [
       "Посоліть, додайте кріп і дайте постояти 10 хвилин під кришкою.",
     ],
   },
+  {
+    id: "sharlotka",
+    title: "Яблучна шарлотка",
+    favorite: true,
+    cooked: 5,
+    lastCooked: 20,
+    created: 20,
+    servings: 8,
+    totalMin: 60,
+    tags: ["Випічка", "Десерт"],
+    description: "Пухкий бісквіт і багато яблук. Найпростіший пиріг до чаю.",
+    ing: [
+      "Яблука — 4 шт",
+      "Яйце — 4 шт",
+      "Цукор — 200 г",
+      "Борошно — 200 г",
+      "Кориця — 1 ч. л.",
+      "Вершкове масло (для форми)",
+    ],
+    steps: [
+      "Наріжте яблука часточками і викладіть у змащену форму.",
+      "Збийте яйця з цукром до світлої пишної маси, 7 хвилин.",
+      "Акуратно вмішайте борошно і корицю, залийте яблука.",
+      "Випікайте при 180 °C 40 хвилин, перевірте дерев’яною шпажкою.",
+    ],
+  },
+  {
+    id: "bulochky",
+    title: "Здобні булочки з корицею",
+    cooked: 2,
+    lastCooked: 45,
+    created: 10,
+    servings: 12,
+    totalMin: 150,
+    tags: ["Випічка", "Сніданок"],
+    description: "М’які дріжджові булочки з корицею і глазур’ю.",
+    ing: [
+      "Борошно — 500 г",
+      "Молоко — 250 мл",
+      "Дріжджі сухі — 7 г",
+      "Цукор — 100 г",
+      "Вершкове масло — 80 г",
+      "Кориця — 2 ч. л.",
+      "Сіль — 1 щіпка",
+    ],
+    steps: [
+      "Замісіть тісто з борошна, теплого молока, дріжджів, половини цукру, масла і солі.",
+      "Залиште тісто в теплі на 1 годину.",
+      "Розкачайте, посипте цукром з корицею, скрутіть рулетом і наріжте.",
+      "Дайте булочкам підійти 30 хвилин.",
+      "Випікайте при 180 °C 25 хвилин.",
+    ],
+  },
 ];
 
 export interface ISampleData {
@@ -417,6 +471,7 @@ export const buildSampleData = (now = Date.now()): ISampleData => {
     return {
       id: s.id,
       title: s.title,
+      category: guessCategory({ title: s.title, tags: s.tags }),
       description: s.description,
       photoId,
       tags: s.tags,

@@ -4,15 +4,22 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import { SelectButton } from "primereact/selectbutton";
 
 import { IngredientsPreview, StepsPreview } from "./components/ParsePreview";
 import PastePanel from "./components/PastePanel";
 import PhotoPicker from "./components/PhotoPicker";
 import TagsField from "./components/TagsField";
-import { draftFrom, type IDraft, recipeFromDraft } from "./draft";
+import {
+  draftCategory,
+  draftFrom,
+  type IDraft,
+  recipeFromDraft,
+} from "./draft";
 
 import {
   allTags,
+  CATEGORY_LABELS,
   cleanTags,
   ingredientToLine,
   type IRecipe,
@@ -20,12 +27,17 @@ import {
   parseIngredients,
   parseRecipeText,
   parseSteps,
+  type RecipeCategory,
 } from "@/domain";
 import { rememberPhoto, useDocumentTitle } from "@/hooks";
 import { useRecipeData, useToast } from "@/providers";
 import { saveRecipe } from "@/source/RecipeSource";
 import { EmptyState, FluentIcon } from "@/ui";
 import { countLabel, INGREDIENTS, STEPS } from "@/utils";
+
+const CATEGORY_OPTIONS = (
+  Object.entries(CATEGORY_LABELS) as [RecipeCategory, string][]
+).map(([value, label]) => ({ value, label }));
 
 const EditorForm = ({ recipe }: { recipe: IRecipe | null }) => {
   const { recipes } = useRecipeData();
@@ -57,6 +69,7 @@ const EditorForm = ({ recipe }: { recipe: IRecipe | null }) => {
     setDraft((d) => ({
       ...d,
       title: p.title || d.title,
+      category: p.category ?? d.category,
       tags: cleanTags([...d.tags, ...p.tags], knownTags),
       description: p.description || d.description,
       servings: p.servings ? String(p.servings) : d.servings,
@@ -174,6 +187,23 @@ const EditorForm = ({ recipe }: { recipe: IRecipe | null }) => {
             <small className="err">Додайте назву, щоб зберегти рецепт.</small>
           )}
         </label>
+
+        <div className="field">
+          <span id="category-label">Розділ</span>
+          <SelectButton
+            value={draftCategory(draft)}
+            options={CATEGORY_OPTIONS}
+            onChange={(e) =>
+              e.value && set("category", e.value as RecipeCategory)
+            }
+            allowEmpty={false}
+            aria-labelledby="category-label"
+            className="seg"
+          />
+          {draft.category === null && (
+            <small>Обрано за назвою і тегами. Можна змінити.</small>
+          )}
+        </div>
 
         <label className="field">
           <span>Короткий опис</span>

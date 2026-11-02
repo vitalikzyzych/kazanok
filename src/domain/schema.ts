@@ -40,6 +40,7 @@ export const stepSchema = z.object({
 export const recipeSchema = z.object({
   id: z.string().min(1).max(40),
   title: z.string().trim().min(1, "Додайте назву").max(LIMITS.title),
+  category: z.enum(["dish", "baking"]),
   description: z.string().max(LIMITS.description),
   photoId: z.string().min(1).max(40).nullable(),
   tags: z.array(z.string().min(1).max(LIMITS.tag)).max(LIMITS.tags),

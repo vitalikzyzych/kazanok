@@ -20,9 +20,13 @@ export interface IStep {
  * One document per recipe: ingredients and steps live inside it. The photo is
  * a separate document (photoId), so the list never downloads photos.
  */
+/** Section in the bottom bar: "Страви" or "Випічка". */
+export type RecipeCategory = "dish" | "baking";
+
 export interface IRecipe {
   id: string;
   title: string;
+  category: RecipeCategory;
   description: string;
   photoId: string | null;
   tags: string[];
@@ -65,6 +69,8 @@ export interface IParsedRecipe {
   description: string;
   servings: number | null;
   totalMin: number | null;
+  /** From a "Розділ:" line; null when the text has none. */
+  category: RecipeCategory | null;
   /** As written in the text; the editor matches them to known tags. */
   tags: string[];
   ingredients: IIngredient[];
@@ -74,6 +80,8 @@ export interface IParsedRecipe {
 export type RecipeSort = "often" | "recent" | "fast" | "added" | "az";
 
 export interface IRecipeFilter {
+  /** Only recipes of this section. */
+  category: RecipeCategory;
   query: string;
   tags: string[];
   /** 0 means no time limit. */

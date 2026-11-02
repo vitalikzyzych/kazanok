@@ -1,3 +1,4 @@
+import { categoryFromText } from "./dish";
 import { capitalize, newId, normalize } from "./text";
 import type { IIngredient, IParsedRecipe, IStep } from "./types";
 
@@ -175,6 +176,7 @@ export const parseRecipeText = (text: string): IParsedRecipe => {
     description: "",
     servings: null,
     totalMin: null,
+    category: null,
     tags: [],
     ingredients: [],
     steps: [],
@@ -210,6 +212,11 @@ export const parseRecipeText = (text: string): IParsedRecipe => {
       low.match(/(\d+)\s*порц/) ?? low.match(/порц\S*\s*:?\s*(\d+)/);
     if (servings && l.length < 40) {
       out.servings = Number(servings[1]);
+      continue;
+    }
+    // "Розділ: Випічка"
+    if (/^розділ\s*:/.test(low)) {
+      out.category = categoryFromText(l.slice(l.indexOf(":") + 1));
       continue;
     }
     // "Теги: Сніданок, Українська кухня"

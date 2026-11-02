@@ -11,10 +11,12 @@ import { FluentIcon } from "@/ui";
  */
 const NavLinks = () => {
   const { pathname } = useLocation();
-  const { toBuyCount } = useRecipeData();
+  const { toBuyCount, recipeById } = useRecipeData();
+  const openId = pathname.match(/^\/recipes\/([^/]+)/)?.[1];
+  const openRecipe = (openId && recipeById.get(openId)?.category) || null;
 
   return NAV_ITEMS.map((item) => {
-    const active = item.isActive(pathname);
+    const active = item.isActive(pathname, openRecipe);
     const badge = item.to === "/shopping" ? toBuyCount : 0;
     return (
       <Link

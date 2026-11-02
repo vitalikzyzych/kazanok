@@ -1,5 +1,5 @@
 import { normalize } from "./text";
-import type { IRecipe } from "./types";
+import type { IRecipe, RecipeCategory } from "./types";
 
 /** What kind of dish a recipe is: picks the icon of a cover without a photo. */
 export type DishKind =
@@ -22,7 +22,7 @@ const RULES: [DishKind, RegExp][] = [
   ["dessert", /десерт|торт|морозив|пудинг|мус\b|тірамісу|чізкейк|желе/],
   [
     "baking",
-    /випічк|пиріг|пиріж|кекс|печиво|булочк|хліб|пампушк|маффін|круасан/,
+    /випічк|шарлотк|штрудел|рулет|пиріг|пиріж|кекс|печиво|булочк|хліб|пампушк|маффін|круасан/,
   ],
   [
     "breakfast",
@@ -61,3 +61,28 @@ export const dishKind = (
     "meat",
   ]) ??
   "other";
+
+export const CATEGORY_LABELS: Record<RecipeCategory, string> = {
+  dish: "Страви",
+  baking: "Випічка",
+};
+
+/**
+ * The section a recipe most likely belongs to: desserts and baking go to
+ * "Випічка", everything else to "Страви". Preselects the editor's switch and
+ * files recipes stored before sections existed.
+ */
+export const guessCategory = (
+  r: Pick<IRecipe, "title" | "tags"> & Partial<Pick<IRecipe, "ingredients">>
+): RecipeCategory => {
+  const kind = dishKind(r);
+  return kind === "dessert" || kind === "baking" ? "baking" : "dish";
+};
+
+/** "Страви" / "Випічка" in pasted text; null when it is neither. */
+export const categoryFromText = (text: string): RecipeCategory | null => {
+  const t = normalize(text);
+  if (/випічк|солодк|десерт/.test(t)) return "baking";
+  if (/страв/.test(t)) return "dish";
+  return null;
+};

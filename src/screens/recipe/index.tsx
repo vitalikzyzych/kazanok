@@ -7,8 +7,13 @@ import IngredientsPane from "./components/IngredientsPane";
 import RecipeMenu from "./components/RecipeMenu";
 import StepsPane from "./components/StepsPane";
 
-import { AddToShoppingDialog, FavoriteButton, useCopyText } from "@/components";
-import { formatMinutes, recipeAsText } from "@/domain";
+import {
+  AddToShoppingDialog,
+  FavoriteButton,
+  SECTION_PATHS,
+  useCopyText,
+} from "@/components";
+import { CATEGORY_LABELS, formatMinutes, recipeAsText } from "@/domain";
 import { rememberPhoto, useDocumentTitle, useWakeLock } from "@/hooks";
 import { useCooking, useRecipeData, useToast } from "@/providers";
 import {
@@ -59,6 +64,13 @@ const RecipePage = () => {
       </div>
     );
 
+  // Back to the list as it was (filters, page); to the section when the
+  // recipe was opened from a link.
+  const back = () =>
+    location.key === "default"
+      ? navigate(SECTION_PATHS[recipe.category])
+      : navigate(-1);
+
   const onError = (e: Error) =>
     toast.show("error", "Не вдалося зберегти", e.message);
 
@@ -79,7 +91,7 @@ const RecipePage = () => {
       : null;
     deleteRecipe(recipe).catch(onError);
     finishCooking(recipe.id);
-    navigate("/");
+    navigate(SECTION_PATHS[recipe.category]);
     toast.show("info", `«${recipe.title}» видалено`, undefined, {
       label: "Повернути",
       onClick: () => {
@@ -111,9 +123,14 @@ const RecipePage = () => {
         <div className="d-media">
           <RecipeCover dish={recipe} photoId={recipe.photoId} />
           <div className="d-bar">
-            <Link to="/" className="bar-btn" aria-label="До рецептів">
+            <Button
+              unstyled
+              className="bar-btn"
+              onClick={back}
+              aria-label={`До розділу «${CATEGORY_LABELS[recipe.category]}»`}
+            >
               <FluentIcon name="ArrowLeft" />
-            </Link>
+            </Button>
             <span className="flex-1" />
             <FavoriteButton recipe={recipe} variant="bar" />
             <Button

@@ -23,8 +23,13 @@ const AppRouter = () => (
   <Suspense fallback={<ScreenFallback />}>
     <Routes>
       <Route element={<AppLayout />}>
-        <Route index element={<Recipes />} />
-        <Route path="favorites" element={<Recipes favoritesOnly />} />
+        <Route index element={<Recipes key="dish" category="dish" />} />
+        <Route
+          path="baking"
+          element={<Recipes key="baking" category="baking" />}
+        />
+        {/* The favourites page became a filter. */}
+        <Route path="favorites" element={<Navigate to="/?fav=1" replace />} />
         <Route path="recipes/:id" element={<RecipePage />} />
         <Route path="recipes/:id/edit" element={<RecipeEditor />} />
         <Route path="add" element={<RecipeEditor />} />

@@ -1,3 +1,4 @@
+import type { RecipeCategory } from "@/domain";
 import type { IconName } from "@/ui";
 
 export interface INavItem {
@@ -7,26 +8,32 @@ export interface INavItem {
   shortLabel: string;
   icon: IconName;
   activeIcon: IconName;
-  /** Pages under this item. */
-  isActive: (pathname: string) => boolean;
+  /** Pages under this item; openRecipe is the section of the recipe open. */
+  isActive: (pathname: string, openRecipe: RecipeCategory | null) => boolean;
 }
+
+/** Where each section's list lives. */
+export const SECTION_PATHS: Record<RecipeCategory, string> = {
+  dish: "/",
+  baking: "/baking",
+};
 
 export const NAV_ITEMS: INavItem[] = [
   {
     to: "/",
-    label: "Рецепти",
-    shortLabel: "Рецепти",
-    icon: "Book",
-    activeIcon: "BookFilled",
-    isActive: (p) => p === "/" || p.startsWith("/recipes"),
+    label: "Страви",
+    shortLabel: "Страви",
+    icon: "Food",
+    activeIcon: "FoodFilled",
+    isActive: (p, open) => p === "/" || open === "dish",
   },
   {
-    to: "/favorites",
-    label: "Улюблені",
-    shortLabel: "Улюблені",
-    icon: "Heart",
-    activeIcon: "HeartFilled",
-    isActive: (p) => p === "/favorites",
+    to: "/baking",
+    label: "Випічка",
+    shortLabel: "Випічка",
+    icon: "FoodCake",
+    activeIcon: "FoodCakeFilled",
+    isActive: (p, open) => p === "/baking" || open === "baking",
   },
   {
     to: "/add",
@@ -48,10 +55,10 @@ export const NAV_ITEMS: INavItem[] = [
 
 /** Title above the page on desktop. */
 export const pageHeading = (pathname: string): string => {
-  if (pathname === "/favorites") return "Улюблені";
+  if (pathname === "/baking") return "Випічка";
   if (pathname === "/add") return "Новий рецепт";
   if (pathname === "/shopping") return "Покупки";
   if (pathname.endsWith("/edit")) return "Редагування";
   if (pathname.startsWith("/recipes/")) return "Рецепт";
-  return "Рецепти";
+  return "Страви";
 };

@@ -2020,6 +2020,119 @@ textarea.p-inputtext {
   font-weight: 650;
 }
 
+/* Segmented control (SelectButton) */
+.p-selectbutton.seg {
+  display: inline-grid;
+  grid-auto-flow: column;
+  justify-self: start;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+}
+
+.p-selectbutton.seg .p-button,
+.p-selectbutton.seg .p-button:not(.p-disabled):not(.p-highlight):hover {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.p-selectbutton.seg .p-button.p-highlight,
+.p-selectbutton.seg .p-button.p-highlight:hover {
+  background: var(--fg);
+  color: var(--surface);
+}
+
+/* Pagination under the feed */
+.p-paginator.pager {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+}
+
+.p-paginator.pager .p-paginator-first,
+.p-paginator.pager .p-paginator-prev,
+.p-paginator.pager .p-paginator-next,
+.p-paginator.pager .p-paginator-last,
+.p-paginator.pager .p-paginator-pages .p-paginator-page {
+  min-width: 44px;
+  height: 44px;
+  margin: 0;
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.p-paginator.pager .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator.pager .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator.pager .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator.pager .p-paginator-last:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator.pager .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+  background: var(--surface-2);
+  color: var(--fg);
+}
+
+.p-paginator.pager .p-disabled {
+  opacity: 0.3;
+}
+
+.p-paginator.pager .p-paginator-pages .p-paginator-page.p-highlight {
+  background: var(--fg);
+  color: var(--surface);
+}
+
+.p-paginator.pager .p-paginator-current {
+  min-width: 72px;
+  height: 44px;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.p-paginator.pager .p-dropdown {
+  height: 40px;
+  margin-left: 8px;
+  align-items: center;
+  border-radius: 20px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+}
+
+.p-paginator.pager .p-dropdown .p-dropdown-label {
+  min-height: 0;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 14px;
+  border: 0;
+  border-radius: 20px 0 0 20px;
+  background: transparent;
+  color: var(--fg);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.p-paginator.pager .p-dropdown:not(.p-disabled).p-focus {
+  border-color: var(--fg);
+  box-shadow: none;
+}
+
+.p-paginator.pager button:focus {
+  box-shadow: none;
+}
+
 /* Tags input (Chips) */
 .p-chips.tags-input {
   display: flex;

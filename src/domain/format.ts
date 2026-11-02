@@ -1,3 +1,4 @@
+import { CATEGORY_LABELS } from "./dish";
 import type { IIngredient, IRecipe } from "./types";
 
 const KITCHEN_FRACTIONS: [number, string][] = [
@@ -71,6 +72,7 @@ export const recipeAsText = (r: IRecipe): string =>
     ...(r.description ? [r.description] : []),
     `Порцій: ${r.servings}`,
     ...(r.totalMin ? [`Час: ${formatMinutes(r.totalMin)}`] : []),
+    `Розділ: ${CATEGORY_LABELS[r.category]}`,
     ...(r.tags.length ? [`Теги: ${r.tags.join(", ")}`] : []),
     "",
     "Інгредієнти:",

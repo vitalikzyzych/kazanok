@@ -29,6 +29,7 @@ const haystack = (r: IRecipe): string =>
     ].join(" ")
   );
 
+/** Anything narrowing the section's list (the section itself does not count). */
 export const isFilterActive = (f: IRecipeFilter): boolean =>
   Boolean(f.query.trim() || f.tags.length || f.maxMin || f.favoritesOnly);
 
@@ -39,6 +40,7 @@ export const filterRecipes = (
 ): IRecipe[] => {
   const words = searchWords(f.query);
   return recipes.filter((r) => {
+    if (r.category !== f.category) return false;
     if (f.favoritesOnly && !r.favorite) return false;
     if (f.maxMin && (r.totalMin === null || r.totalMin > f.maxMin))
       return false;
@@ -69,3 +71,19 @@ export const sortRecipes = (recipes: IRecipe[], sort: RecipeSort): IRecipe[] =>
   [...recipes].sort(
     (a, b) => COMPARE[sort](a, b) || a.title.localeCompare(b.title, "uk")
   );
+
+export const PAGE_SIZES = [10, 20, 50] as const;
+
+/**
+ * One page of a list, 1-based. A page past the end shows the last page, so a
+ * link kept from a longer list still shows something.
+ */
+export const pageOf = <T>(
+  list: T[],
+  page: number,
+  size: number
+): { items: T[]; page: number; pages: number } => {
+  const pages = Math.max(1, Math.ceil(list.length / size));
+  const p = Math.min(Math.max(1, Math.floor(page) || 1), pages);
+  return { items: list.slice((p - 1) * size, p * size), page: p, pages };
+};

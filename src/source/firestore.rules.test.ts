@@ -85,6 +85,15 @@ describe("firestore.rules", () => {
     );
   });
 
+  it("keeps recipes stored before sections editable", async () => {
+    const { id: _id, category: _c, ...old } = sample.recipes[1];
+    await setDoc(doc(db, "recipes", "old-recipe"), old);
+    await setFavorite("old-recipe", true);
+    await refused(
+      setDoc(doc(db, "recipes", "bad-section"), { ...old, category: "drinks" })
+    );
+  });
+
   it("refuses photos that are not images or are too big", async () => {
     await refused(
       setDoc(doc(db, "recipePhotos", "p1"), { dataUrl: "javascript:alert(1)" })
