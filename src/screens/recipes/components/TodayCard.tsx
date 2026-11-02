@@ -51,7 +51,7 @@ const TodayCard = ({ recipes }: { recipes: IRecipe[] }) => {
         </div>
       </div>
       <Link className="today__pic" to={`/recipes/${r.id}`} aria-label={r.title}>
-        <RecipeCover seed={r.id} photoId={r.photoId} />
+        <RecipeCover dish={r} photoId={r.photoId} />
       </Link>
     </section>
   );

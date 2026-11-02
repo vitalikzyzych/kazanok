@@ -16,7 +16,7 @@ export const normalize = (s: string | null | undefined): string =>
     .replace(/\s+/g, " ")
     .trim();
 
-/** Stable 32-bit hash of a string (cover colours, flower shapes). */
+/** Stable 32-bit hash of a string (cover and tag tints). */
 export const hashString = (s: string): number => {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;

@@ -1,23 +1,22 @@
-import FlowerCover from "./FlowerCover";
+import DishCover, { type DishInfo } from "./DishCover";
 
 import { usePhoto } from "@/hooks";
 
 interface IRecipeCoverProps {
-  /** Recipe id (or title of a new recipe): picks the flower colour. */
-  seed: string;
+  dish: DishInfo;
   photoId: string | null;
-  /** A photo not saved yet (editor preview). */
+  /** A photo not saved yet (editor preview); null shows the cover. */
   photoUrl?: string | null;
 }
 
-/** The recipe's photo, or its flower cover while there is none. */
-const RecipeCover = ({ seed, photoId, photoUrl }: IRecipeCoverProps) => {
+/** The recipe's photo, or its dish cover while there is none. */
+const RecipeCover = ({ dish, photoId, photoUrl }: IRecipeCoverProps) => {
   const stored = usePhoto(photoUrl === undefined ? photoId : null);
   const url = photoUrl === undefined ? stored : photoUrl;
   return url ? (
     <img className="cover-img" src={url} alt="" />
   ) : (
-    <FlowerCover seed={seed} />
+    <DishCover dish={dish} />
   );
 };
 

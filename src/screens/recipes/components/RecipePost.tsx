@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 
 import { FavoriteButton } from "@/components";
 import { formatMinutes, type IRecipe } from "@/domain";
-import { flowerClass, FlowerCover, FluentIcon, RecipeCover } from "@/ui";
+import { DishCover, FluentIcon, RecipeCover, tintClass } from "@/ui";
 import { countLabel, SERVINGS, TIMES } from "@/utils";
 
 interface IRecipePostProps {
@@ -12,7 +12,7 @@ interface IRecipePostProps {
   onShop: (recipe: IRecipe) => void;
 }
 
-/** A recipe in the feed: flower avatar, title, time, text, tags, photo, actions. */
+/** A recipe in the feed: dish avatar, title, time, text, tags, photo, actions. */
 const RecipePost = ({ recipe: r, onShop }: IRecipePostProps) => {
   const cooked = r.cookCount
     ? `Готували ${countLabel(r.cookCount, TIMES)}`
@@ -21,7 +21,7 @@ const RecipePost = ({ recipe: r, onShop }: IRecipePostProps) => {
   return (
     <article className="post">
       <span className="ava">
-        <FlowerCover seed={r.id} />
+        <DishCover dish={r} />
       </span>
       <div className="post-body">
         <div className="post-head">
@@ -35,7 +35,7 @@ const RecipePost = ({ recipe: r, onShop }: IRecipePostProps) => {
           <p className="post-tags">
             {r.tags.map((t) => (
               <span key={t}>
-                <i className={`dot ${flowerClass(t)}`} />
+                <i className={`dot ${tintClass(t)}`} />
                 {t}
               </span>
             ))}
@@ -43,7 +43,7 @@ const RecipePost = ({ recipe: r, onShop }: IRecipePostProps) => {
         )}
         {r.photoId && (
           <span className="post-media">
-            <RecipeCover seed={r.id} photoId={r.photoId} />
+            <RecipeCover dish={r} photoId={r.photoId} />
           </span>
         )}
         <div className="post-actions">

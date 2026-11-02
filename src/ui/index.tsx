@@ -1,10 +1,10 @@
 export { default as CheckRow } from "./CheckRow";
 export { default as CopyTextDialog } from "./CopyTextDialog";
+export { default as DishCover, type DishInfo } from "./DishCover";
 export { default as EmptyState } from "./EmptyState";
-export { flowerClass } from "./flower";
-export { default as FlowerCover } from "./FlowerCover";
 export { default as FluentIcon, type IconName } from "./FluentIcon";
 export { default as Logo } from "./Logo";
 export { default as RecipeCover } from "./RecipeCover";
 export { default as ServingsStepper } from "./ServingsStepper";
 export { default as Sheet } from "./Sheet";
+export { tintClass } from "./tint";

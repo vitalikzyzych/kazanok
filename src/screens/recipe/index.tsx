@@ -17,7 +17,7 @@ import {
   markCooked,
   saveRecipe,
 } from "@/source/RecipeSource";
-import { EmptyState, flowerClass, FluentIcon, RecipeCover } from "@/ui";
+import { EmptyState, FluentIcon, RecipeCover, tintClass } from "@/ui";
 import { countLabel, TIMES } from "@/utils";
 
 const RecipePage = () => {
@@ -109,7 +109,7 @@ const RecipePage = () => {
     <div className="page detail">
       <div className="d-top">
         <div className="d-media">
-          <RecipeCover seed={recipe.id} photoId={recipe.photoId} />
+          <RecipeCover dish={recipe} photoId={recipe.photoId} />
           <div className="d-bar">
             <Link to="/" className="bar-btn" aria-label="До рецептів">
               <FluentIcon name="ArrowLeft" />
@@ -131,7 +131,7 @@ const RecipePage = () => {
           {recipe.tags.length > 0 && (
             <div className="tags">
               {recipe.tags.map((t) => (
-                <span key={t} className={`tag tag-flower ${flowerClass(t)}`}>
+                <span key={t} className={`tag tag-tint ${tintClass(t)}`}>
                   {t}
                 </span>
               ))}

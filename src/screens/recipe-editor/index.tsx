@@ -189,7 +189,7 @@ const EditorForm = ({ recipe }: { recipe: IRecipe | null }) => {
         <div className="field">
           <span>Фото</span>
           <PhotoPicker
-            seed={recipe?.id ?? (draft.title || "new")}
+            dish={{ title: draft.title, tags: draft.tags }}
             storedPhotoId={recipe?.photoId ?? null}
             photo={draft.photo}
             onChange={(p) => set("photo", p)}

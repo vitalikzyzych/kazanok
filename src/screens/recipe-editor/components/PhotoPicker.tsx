@@ -6,11 +6,12 @@ import type { DraftPhoto } from "../draft";
 
 import { LIMITS } from "@/domain";
 import { useToast } from "@/providers";
-import { FluentIcon, RecipeCover } from "@/ui";
+import { type DishInfo, FluentIcon, RecipeCover } from "@/ui";
 import { resizePhoto } from "@/utils";
 
 interface IPhotoPickerProps {
-  seed: string;
+  /** Title and tags so far: pick the cover shown without a photo. */
+  dish: DishInfo;
   storedPhotoId: string | null;
   photo: DraftPhoto;
   onChange: (photo: DraftPhoto) => void;
@@ -18,7 +19,7 @@ interface IPhotoPickerProps {
 
 /** The browser shrinks the photo before it is stored (utils/image.ts). */
 const PhotoPicker = ({
-  seed,
+  dish,
   storedPhotoId,
   photo,
   onChange,
@@ -53,7 +54,7 @@ const PhotoPicker = ({
     <div className="photo-pick">
       <div className="media">
         <RecipeCover
-          seed={seed}
+          dish={dish}
           photoId={photo.kind === "keep" ? storedPhotoId : null}
           photoUrl={
             photo.kind === "new"

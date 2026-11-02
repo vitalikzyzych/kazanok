@@ -1,4 +1,5 @@
 export * from "./chatgptPrompt";
+export * from "./dish";
 export * from "./format";
 export * from "./parse";
 export * from "./schema";

@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 
-import { flowerClass, FluentIcon } from "@/ui";
+import { FluentIcon, tintClass } from "@/ui";
 
 const TIME_LIMITS = [20, 45];
 
@@ -42,7 +42,7 @@ const FilterChips = ({
         aria-pressed={selectedTags.includes(t)}
         onClick={() => onToggleTag(t)}
       >
-        <i className={`dot ${flowerClass(t)}`} />
+        <i className={`dot ${tintClass(t)}`} />
         {t}
       </Button>
     ))}

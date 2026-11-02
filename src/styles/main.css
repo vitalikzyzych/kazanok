@@ -26,25 +26,19 @@
   --glass: rgba(255, 255, 255, 0.86);
   --scrim: rgba(0, 0, 0, 0.4);
   --shadow: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 12px 40px rgba(0, 0, 0, 0.12);
-  /* Flower accents: background, petal, core. */
-  --f0-bg: #fce4ee;
-  --f0: #d8488e;
-  --f0-core: #f6c445;
-  --f1-bg: #ece7fb;
-  --f1: #7c63d1;
-  --f1-core: #f2d46b;
-  --f2-bg: #e2f2e7;
-  --f2: #4e9a6b;
-  --f2-core: #f3e7a6;
-  --f3-bg: #fdf1cc;
-  --f3: #e3a21a;
-  --f3-core: #7a4a12;
-  --f4-bg: #e1eafc;
-  --f4: #4c78d0;
-  --f4-core: #f5e9b8;
-  --f5-bg: #fde5dc;
-  --f5: #e0573a;
-  --f5-core: #3a2a2e;
+  /* Tints for tags and covers without a photo: background and icon. */
+  --t0-bg: #fce4ee;
+  --t0: #d8488e;
+  --t1-bg: #ece7fb;
+  --t1: #7c63d1;
+  --t2-bg: #e2f2e7;
+  --t2: #4e9a6b;
+  --t3-bg: #fdf1cc;
+  --t3: #e3a21a;
+  --t4-bg: #e1eafc;
+  --t4: #4c78d0;
+  --t5-bg: #fde5dc;
+  --t5: #e0573a;
 
   --font:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto,
@@ -88,24 +82,18 @@
     --scrim: rgba(0, 0, 0, 0.65);
     --shadow:
       0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 40px rgba(0, 0, 0, 0.6);
-    --f0-bg: #3a1b2c;
-    --f0: #f28dbe;
-    --f0-core: #f6c445;
-    --f1-bg: #2a2342;
-    --f1: #b5a3f3;
-    --f1-core: #f2d46b;
-    --f2-bg: #1b3326;
-    --f2: #8ed1a6;
-    --f2-core: #f3e7a6;
-    --f3-bg: #3a2e10;
-    --f3: #f3c452;
-    --f3-core: #8a5a1e;
-    --f4-bg: #1b2a44;
-    --f4: #8fb1f2;
-    --f4-core: #f5e9b8;
-    --f5-bg: #3f1e17;
-    --f5: #f28a6e;
-    --f5-core: #1a1214;
+    --t0-bg: #3a1b2c;
+    --t0: #f28dbe;
+    --t1-bg: #2a2342;
+    --t1: #b5a3f3;
+    --t2-bg: #1b3326;
+    --t2: #8ed1a6;
+    --t3-bg: #3a2e10;
+    --t3: #f3c452;
+    --t4-bg: #1b2a44;
+    --t4: #8fb1f2;
+    --t5-bg: #3f1e17;
+    --t5: #f28a6e;
     color-scheme: dark;
   }
 }
@@ -131,24 +119,18 @@
   --scrim: rgba(0, 0, 0, 0.65);
   --shadow:
     0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 40px rgba(0, 0, 0, 0.6);
-  --f0-bg: #3a1b2c;
-  --f0: #f28dbe;
-  --f0-core: #f6c445;
-  --f1-bg: #2a2342;
-  --f1: #b5a3f3;
-  --f1-core: #f2d46b;
-  --f2-bg: #1b3326;
-  --f2: #8ed1a6;
-  --f2-core: #f3e7a6;
-  --f3-bg: #3a2e10;
-  --f3: #f3c452;
-  --f3-core: #8a5a1e;
-  --f4-bg: #1b2a44;
-  --f4: #8fb1f2;
-  --f4-core: #f5e9b8;
-  --f5-bg: #3f1e17;
-  --f5: #f28a6e;
-  --f5-core: #1a1214;
+  --t0-bg: #3a1b2c;
+  --t0: #f28dbe;
+  --t1-bg: #2a2342;
+  --t1: #b5a3f3;
+  --t2-bg: #1b3326;
+  --t2: #8ed1a6;
+  --t3-bg: #3a2e10;
+  --t3: #f3c452;
+  --t4-bg: #1b2a44;
+  --t4: #8fb1f2;
+  --t5-bg: #3f1e17;
+  --t5: #f28a6e;
   color-scheme: dark;
 }
 
@@ -244,36 +226,30 @@ p {
   color: var(--love);
 }
 
-/* ---------- flower palettes ---------- */
-.f0 {
-  --fl: var(--f0);
-  --fl-bg: var(--f0-bg);
-  --fl-core: var(--f0-core);
+/* ---------- tints ---------- */
+.t0 {
+  --tn: var(--t0);
+  --tn-bg: var(--t0-bg);
 }
-.f1 {
-  --fl: var(--f1);
-  --fl-bg: var(--f1-bg);
-  --fl-core: var(--f1-core);
+.t1 {
+  --tn: var(--t1);
+  --tn-bg: var(--t1-bg);
 }
-.f2 {
-  --fl: var(--f2);
-  --fl-bg: var(--f2-bg);
-  --fl-core: var(--f2-core);
+.t2 {
+  --tn: var(--t2);
+  --tn-bg: var(--t2-bg);
 }
-.f3 {
-  --fl: var(--f3);
-  --fl-bg: var(--f3-bg);
-  --fl-core: var(--f3-core);
+.t3 {
+  --tn: var(--t3);
+  --tn-bg: var(--t3-bg);
 }
-.f4 {
-  --fl: var(--f4);
-  --fl-bg: var(--f4-bg);
-  --fl-core: var(--f4-core);
+.t4 {
+  --tn: var(--t4);
+  --tn-bg: var(--t4-bg);
 }
-.f5 {
-  --fl: var(--f5);
-  --fl-bg: var(--f5-bg);
-  --fl-core: var(--f5-core);
+.t5 {
+  --tn: var(--t5);
+  --tn-bg: var(--t5-bg);
 }
 
 .dot {
@@ -282,16 +258,22 @@ p {
   height: 8px;
   flex: none;
   border-radius: 50%;
-  background: var(--fl);
+  background: var(--tn);
 }
 
-.logo-mark__petals {
+.logo-mark__pot {
   fill: var(--accent);
-  opacity: 0.9;
 }
 
-.logo-mark__core {
-  fill: var(--f3);
+.logo-mark__warm {
+  fill: var(--t3);
+}
+
+.logo-mark__steam {
+  fill: none;
+  stroke: var(--t3);
+  stroke-width: 1.8;
+  stroke-linecap: round;
 }
 
 /* ---------- shell ---------- */
@@ -682,8 +664,8 @@ p {
   text-decoration: none;
 }
 
-.tag-flower {
-  background: var(--fl-bg);
+.tag-tint {
+  background: var(--tn-bg);
 }
 
 .tag-warn {
@@ -709,37 +691,20 @@ p {
   display: block;
 }
 
+/* Cover without a photo: a tint and an outline icon of the kind of dish. */
 .cover {
   position: absolute;
   inset: 0;
-  background: var(--fl-bg);
+  display: grid;
+  place-items: center;
+  container-type: size;
+  background: var(--tn-bg);
+  color: var(--tn);
 }
 
-.cover svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.cover .pt {
-  fill: var(--fl);
-}
-
-.cover .pt2 {
-  fill: color-mix(in srgb, var(--fl) 55%, var(--fl-bg));
-}
-
-.cover .cr {
-  fill: var(--fl-core);
-}
-
-.cover .lf {
-  fill: color-mix(in srgb, var(--f2) 70%, var(--fl-bg));
-}
-
-.cover .sd {
-  fill: color-mix(in srgb, var(--fl-core) 60%, var(--fl));
+.cover__icon {
+  width: 46cqmin;
+  height: 46cqmin;
 }
 
 .ava {
@@ -751,12 +716,6 @@ p {
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 0 0 0.5px var(--line-strong);
-}
-
-.ava .cover svg,
-.today__pic .cover svg {
-  transform: scale(1.6);
-  transform-origin: 70% 43%;
 }
 
 /* ---------- feed ---------- */
