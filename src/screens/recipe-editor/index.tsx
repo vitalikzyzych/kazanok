@@ -13,6 +13,7 @@ import { draftFrom, type IDraft, recipeFromDraft } from "./draft";
 
 import {
   allTags,
+  cleanTags,
   ingredientToLine,
   type IRecipe,
   newId,
@@ -56,6 +57,7 @@ const EditorForm = ({ recipe }: { recipe: IRecipe | null }) => {
     setDraft((d) => ({
       ...d,
       title: p.title || d.title,
+      tags: cleanTags([...d.tags, ...p.tags], knownTags),
       description: p.description || d.description,
       servings: p.servings ? String(p.servings) : d.servings,
       totalMin: p.totalMin ? String(p.totalMin) : d.totalMin,
@@ -139,7 +141,13 @@ const EditorForm = ({ recipe }: { recipe: IRecipe | null }) => {
         </div>
       </header>
 
-      {isNew && <PastePanel onParse={parse} formEmpty={formEmpty} />}
+      {isNew && (
+        <PastePanel
+          onParse={parse}
+          formEmpty={formEmpty}
+          knownTags={knownTags}
+        />
+      )}
 
       <form
         className="form"

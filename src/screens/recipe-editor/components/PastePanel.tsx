@@ -4,13 +4,15 @@ import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
 
 import { useCopyText } from "@/components";
-import { CHATGPT_PROMPT, RECIPE_FORMAT_EXAMPLE } from "@/domain";
+import { chatgptPrompt, RECIPE_FORMAT_EXAMPLE } from "@/domain";
 import { FluentIcon } from "@/ui";
 
 interface IPastePanelProps {
   /** Fill the form from the text; auto: right after a paste into an empty form. */
   onParse: (text: string, auto: boolean) => void;
   formEmpty: boolean;
+  /** Tags already used, put into the request so ChatGPT picks from them. */
+  knownTags: string[];
 }
 
 /**
@@ -18,7 +20,7 @@ interface IPastePanelProps {
  * page, "Запит для ChatGPT" copies a request that makes ChatGPT answer in
  * exactly the format the parser reads.
  */
-const PastePanel = ({ onParse, formEmpty }: IPastePanelProps) => {
+const PastePanel = ({ onParse, formEmpty, knownTags }: IPastePanelProps) => {
   const [text, setText] = useState("");
   const { copy, dialog } = useCopyText();
 
@@ -58,7 +60,7 @@ const PastePanel = ({ onParse, formEmpty }: IPastePanelProps) => {
           severity="secondary"
           icon={<FluentIcon name="Copy" size={20} />}
           label="Запит для ChatGPT"
-          onClick={() => copy(CHATGPT_PROMPT, "Запит скопійовано")}
+          onClick={() => copy(chatgptPrompt(knownTags), "Запит скопійовано")}
         />
         <Button
           text

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  CHATGPT_PROMPT,
+  CHATGPT_PROMPT_TEMPLATE,
+  cleanTags,
   defaultShoppingSelection,
   detectTimer,
   filterRecipes,
@@ -18,6 +19,7 @@ import {
   parseSteps,
   pickForToday,
   RECIPE_FORMAT_EXAMPLE,
+  recipeAsText,
   recipeSchema,
   shoppingAsText,
   shoppingItemsFrom,
@@ -203,7 +205,8 @@ describe("parseRecipeText", () => {
       { name: "Сметана", qty: null, unit: "", note: "для подачі" },
     ]);
     expect(r.steps.map((s) => s.timerMin)).toEqual([null, null, 3]);
-    expect(CHATGPT_PROMPT).toContain(RECIPE_FORMAT_EXAMPLE);
+    expect(r.tags).toEqual(["Сніданок", "Українська кухня", "Вегетаріанське"]);
+    expect(CHATGPT_PROMPT_TEMPLATE).toContain(RECIPE_FORMAT_EXAMPLE);
   });
 
   it("follows headings, keeps long descriptions, skips links", () => {
@@ -224,6 +227,32 @@ describe("parseRecipeText", () => {
     expect(r.description).toBe(long);
     expect(r.ingredients).toHaveLength(1);
     expect(r.steps.map((s) => s.text)).toEqual(["Наріжте."]);
+  });
+
+  it("reads hours and minutes on the time line", () => {
+    expect(parseRecipeText("Борщ\nЧас: 1 год 15 хв").totalMin).toBe(75);
+    expect(parseRecipeText("Борщ\nЧас: 2 год").totalMin).toBe(120);
+    expect(parseRecipeText("Борщ\nЧас: 1,5 години").totalMin).toBe(90);
+  });
+
+  it("round-trips a recipe copied as text, tags included", () => {
+    const r = recipe({
+      title: "Борщ",
+      totalMin: 75,
+      tags: ["Суп", "Обід"],
+      ingredients: [
+        { id: "a", name: "Буряк", qty: 2, unit: "шт", note: "" },
+        { id: "b", name: "Сіль", qty: null, unit: "", note: "за смаком" },
+      ],
+      steps: [{ id: "s", text: "Варіть 10 хвилин.", timerMin: 10 }],
+    });
+    const back = parseRecipeText(recipeAsText(r));
+    expect(back.title).toBe("Борщ");
+    expect(back.totalMin).toBe(75);
+    expect(back.servings).toBe(4);
+    expect(back.tags).toEqual(["Суп", "Обід"]);
+    expect(back.ingredients.map(strip)).toEqual(r.ingredients.map(strip));
+    expect(back.steps.map((s) => s.timerMin)).toEqual([10]);
   });
 
   it("guesses sections without headings", () => {
@@ -260,6 +289,20 @@ describe("formatting", () => {
     expect(formatMinutes(75)).toBe("1 год 15 хв");
     expect(formatCountdown(65_000)).toBe("1:05");
     expect(formatCountdown(3_725_000)).toBe("1:02:05");
+  });
+});
+
+describe("tags", () => {
+  it("reuses known spelling, drops duplicates, keeps new ones", () => {
+    expect(
+      cleanTags(
+        ["сніданок", " Вегетаріанське", "СНІДАНОК", "Нова кухня", ""],
+        ["Сніданок", "Суп"]
+      )
+    ).toEqual(["Сніданок", "Вегетаріанське", "Нова кухня"]);
+    expect(
+      cleanTags(Array.from({ length: 20 }, (_, i) => `Тег ${i}`))
+    ).toHaveLength(12);
   });
 });
 

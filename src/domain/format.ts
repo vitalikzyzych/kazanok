@@ -69,7 +69,9 @@ export const recipeAsText = (r: IRecipe): string =>
   [
     r.title,
     ...(r.description ? [r.description] : []),
-    `Порцій: ${r.servings}, час: ${formatMinutes(r.totalMin)}`,
+    `Порцій: ${r.servings}`,
+    ...(r.totalMin ? [`Час: ${formatMinutes(r.totalMin)}`] : []),
+    ...(r.tags.length ? [`Теги: ${r.tags.join(", ")}`] : []),
     "",
     "Інгредієнти:",
     ...r.ingredients.map((i) => `- ${ingredientToLine(i)}`),

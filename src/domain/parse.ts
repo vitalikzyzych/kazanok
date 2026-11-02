@@ -129,6 +129,17 @@ export const detectTimer = (text: string): number | null => {
   return Math.round(n) || null;
 };
 
+/** Total time: "45 хв", "2 год", "1 год 15 хв", "1,5 години". */
+export const parseDuration = (text: string): number | null => {
+  const h = text.match(/(\d+(?:[.,]\d+)?)\s*год/i);
+  const m = text.match(/(\d+)\s*хв/i);
+  if (!h && !m) return detectTimer(text);
+  const total =
+    (h ? Number.parseFloat(h[1].replace(",", ".")) * 60 : 0) +
+    (m ? Number(m[1]) : 0);
+  return Math.round(total) || null;
+};
+
 export const parseSteps = (text: string): IStep[] =>
   text
     .split(/\r?\n/)
@@ -164,6 +175,7 @@ export const parseRecipeText = (text: string): IParsedRecipe => {
     description: "",
     servings: null,
     totalMin: null,
+    tags: [],
     ingredients: [],
     steps: [],
   };
@@ -200,9 +212,18 @@ export const parseRecipeText = (text: string): IParsedRecipe => {
       out.servings = Number(servings[1]);
       continue;
     }
+    // "Теги: Сніданок, Українська кухня"
+    if (/^(теги|тег|мітки)\s*:/.test(low)) {
+      out.tags = l
+        .slice(l.indexOf(":") + 1)
+        .split(/[,;]/)
+        .map((t) => t.trim())
+        .filter(Boolean);
+      continue;
+    }
     const time = low.match(/^(час|час приготування|готується)\s*:?\s*(.+)$/);
     if (time) {
-      out.totalMin = detectTimer(time[2]);
+      out.totalMin = parseDuration(time[2]);
       continue;
     }
     if (!out.title) {

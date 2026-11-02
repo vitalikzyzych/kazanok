@@ -1619,6 +1619,17 @@ p {
   text-overflow: ellipsis;
 }
 
+/* A tag no saved recipe uses yet. */
+.tag-new {
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 9px;
+  background: var(--herb-soft);
+  color: var(--herb);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .suggest {
   display: flex;
   flex-wrap: wrap;

@@ -65,6 +65,8 @@ export interface IParsedRecipe {
   description: string;
   servings: number | null;
   totalMin: number | null;
+  /** As written in the text; the editor matches them to known tags. */
+  tags: string[];
   ingredients: IIngredient[];
   steps: IStep[];
 }

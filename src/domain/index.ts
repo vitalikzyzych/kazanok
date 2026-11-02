@@ -4,6 +4,7 @@ export * from "./parse";
 export * from "./schema";
 export * from "./search";
 export * from "./shopping";
+export * from "./tags";
 export * from "./text";
 export * from "./today";
 export * from "./types";
