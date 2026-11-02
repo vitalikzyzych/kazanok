@@ -34,6 +34,7 @@ Emulator: `JAVA_HOME=/opt/homebrew/opt/openjdk@21 PATH="/opt/homebrew/opt/openjd
 - Screens do not wait for writes: Firestore updates the local snapshot at once and the promise settles when the server answers (much later offline). Errors show a toast and the snapshot rolls back. A recipe and its photo change are one batch (`saveRecipe(recipe, { add, removeId })`).
 - The real database started empty (2026-11-02). Sample data (`sampleRecipes.ts`, `samplePhotos.ts`) is used only by `seedEmulator.ts` and the rules tests. Recipes typed during the localStorage phase were not migrated.
 - Recipe photos are separate documents (`photoId`), loaded by `usePhoto` only when shown; the editor shrinks photos to 1200 px WebP (`utils/image.ts`). Photos are stored in Firestore (user's choice by default, 2026-11-02), rules cap a photo at 900 000 characters.
+- **Icons and link preview** (2026-11-02, as in fc-tournament): `public/` holds `favicon.svg`, PNG icons (32, 180, 192, 512, maskable 512), `site.webmanifest` and `og-image.png` (1200x630: logo, name, tagline, flower covers). `index.html` has the description, Open Graph and Twitter tags with absolute `https://kazanok-f7ab7.web.app/...` URLs, and keeps `robots noindex` (no sign-in, so the app stays out of search results). The PNGs were rendered once from HTML in headless Chrome; there is no build step for them.
 - App Check is not set up yet (optional; steps in fc-tournament's README, section 6).
 - Cooking state on this device (servings chosen, steps done, timers) lives in `CookingProvider`, in memory only.
 - Styling: Lara light is loaded for component structure only; `styles/main.css` defines the prototype's colour tokens (light and dark) and recolours the PrimeReact components used. Buttons with custom looks (chips, timers, step numbers) are `Button unstyled`.
@@ -49,7 +50,7 @@ Emulator: `JAVA_HOME=/opt/homebrew/opt/openjdk@21 PATH="/opt/homebrew/opt/openjd
 3. Domain and data: recipe types, zod schema, pure functions (search, filters, servings scaling, shopping list, whatever the design has) with vitest tests.
 4. Firestore: `source/RecipeSource.ts` for every read and write, one live subscription in a data provider (as `TournamentDataProvider` does), rules plus emulator tests.
 5. Screens, in this order: recipe list and recipe page, add and edit, cooking mode, then the extras from the design.
-6. Icons, manifest and link preview (same approach as `../fc-tournament/public` and its `index.html`), then deploy after the user confirms.
+6. Icons, manifest and link preview (done 2026-11-02), then deploy after the user confirms.
 
 Build the screens step by step and show each one to the user. Check every screen in headless Chrome against the emulator at 390 px and 1440 px: no console errors, no sideways scroll on phones.
 
