@@ -5,7 +5,10 @@ import { NAV_ITEMS } from "./navigation";
 import { useRecipeData } from "@/providers";
 import { FluentIcon } from "@/ui";
 
-/** Icon-only links of the bottom bar and the desktop rail. */
+/**
+ * Icon and label links of the bottom bar and the desktop rail. The page that
+ * is open shows a filled icon, and its icon and label take the active colour.
+ */
 const NavLinks = () => {
   const { pathname } = useLocation();
   const { toBuyCount } = useRecipeData();
@@ -13,23 +16,22 @@ const NavLinks = () => {
   return NAV_ITEMS.map((item) => {
     const active = item.isActive(pathname);
     const badge = item.to === "/shopping" ? toBuyCount : 0;
-    const icon = (
-      <FluentIcon
-        name={active && item.activeIcon ? item.activeIcon : item.icon}
-        size={27}
-      />
-    );
     return (
       <Link
         key={item.to}
         to={item.to}
-        className={item.to === "/add" ? "nv nv-add" : "nv"}
+        className="nv"
         aria-label={badge ? `${item.label}, ${badge}` : item.label}
         title={item.label}
         aria-current={active ? "page" : undefined}
       >
-        {item.to === "/add" ? <span className="sq">{icon}</span> : icon}
-        {badge > 0 && <span className="badge">{badge}</span>}
+        <span className="nv__icon">
+          <FluentIcon name={active ? item.activeIcon : item.icon} size={24} />
+          {badge > 0 && <span className="badge">{badge}</span>}
+        </span>
+        <span className="nv__label" aria-hidden>
+          {item.shortLabel}
+        </span>
       </Link>
     );
   });
